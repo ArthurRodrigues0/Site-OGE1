@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Tickets de Suporte</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-ticket-alt"></i>
+                <h1>Sistema de Tickets</h1>
+            </div>
+            <div class="user-info">
+                <a href="dados.html" class="user-profile-link">
+                    <div class="user-profile">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="usuario-nome">Administrador</span>
+                        <span class="user-role" id="usuario-perfil">Admin</span>
+                    </div>
+                </a>
+                <div class="header-actions">
+                    <button class="btn-icon" id="btn-notificacoes" title="Notificações">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notification-count">3</span>
+                    </button>
+                    <button class="btn-icon" id="btn-configuracoes" title="Configurações">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button class="btn-icon" id="btn-logout" title="Sair">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <nav class="sidebar-nav">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="tickets">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span>Tickets</span>
+                        <span class="nav-badge" id="tickets-count">5</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="novo-ticket">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Novo Ticket</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="usuarios">
+                        <i class="fas fa-users"></i>
+                        <span>Usuários</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="categorias">
+                        <i class="fas fa-tags"></i>
+                        <span>Categorias</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="relatorios">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Relatórios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="configuracoes">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="content-section active">
+            <div class="section-header">
+                <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                <div class="section-actions">
+                    <button class="btn btn-primary" id="btn-refresh-dashboard">
+                        <i class="fas fa-sync-alt"></i> Atualizar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="total-tickets">0</h3>
+                        <p>Total de Tickets</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon open">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="tickets-abertos">0</h3>
+                        <p>Tickets Abertos</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon progress">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="tickets-andamento">0</h3>
+                        <p>Em Andamento</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon resolved">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="tickets-resolvidos">0</h3>
+                        <p>Resolvidos</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <div class="chart-container">
+                    <h3>Tickets por Status</h3>
+                    <canvas id="statusChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Tickets por Prioridade</h3>
+                    <canvas id="prioridadeChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Tickets -->
+            <div class="recent-tickets">
+                <h3><i class="fas fa-history"></i> Tickets Recentes</h3>
+                <div class="tickets-list" id="recent-tickets-list">
+                    <!-- Tickets serão carregados dinamicamente -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Tickets Section -->
+        <section id="tickets-section" class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-ticket-alt"></i> Gerenciar Tickets</h2>
+                <div class="section-actions">
+                    <button class="btn btn-primary" id="btn-novo-ticket">
+                        <i class="fas fa-plus"></i> Novo Ticket
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-bar">
+                <div class="filter-group">
+                    <label for="filter-status">Status:</label>
+                    <select id="filter-status" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="ABERTO">Aberto</option>
+                        <option value="EM_ANDAMENTO">Em Andamento</option>
+                        <option value="RESOLVIDO">Resolvido</option>
+                        <option value="FECHADO">Fechado</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-prioridade">Prioridade:</label>
+                    <select id="filter-prioridade" class="form-select">
+                        <option value="">Todas</option>
+                        <option value="BAIXA">Baixa</option>
+                        <option value="MEDIA">Média</option>
+                        <option value="ALTA">Alta</option>
+                        <option value="CRITICA">Crítica</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-categoria">Categoria:</label>
+                    <select id="filter-categoria" class="form-select">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <input type="text" id="search-tickets" class="form-input" placeholder="Buscar tickets...">
+                    <button class="btn btn-secondary" id="btn-search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tickets Table -->
+            <div class="table-container">
+                <table class="tickets-table" id="tickets-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Status</th>
+                            <th>Prioridade</th>
+                            <th>Categoria</th>
+                            <th>Solicitante</th>
+                            <th>Responsável</th>
+                            <th>Data</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tickets-tbody">
+                        <!-- Tickets serão carregados dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <!-- Paginação será gerada dinamicamente -->
+            </div>
+        </section>
+
+        <!-- Novo Ticket Section -->
+        <section id="novo-ticket-section" class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-plus-circle"></i> Criar Novo Ticket</h2>
+            </div>
+
+            <div class="form-container">
+                <form id="form-novo-ticket" class="ticket-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ticket-titulo">Título *</label>
+                            <input type="text" id="ticket-titulo" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ticket-categoria">Categoria *</label>
+                            <select id="ticket-categoria" class="form-select" required>
+                                <option value="">Selecione uma categoria</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ticket-prioridade">Prioridade</label>
+                            <select id="ticket-prioridade" class="form-select">
+                                <option value="BAIXA">Baixa</option>
+                                <option value="MEDIA" selected>Média</option>
+                                <option value="ALTA">Alta</option>
+                                <option value="CRITICA">Crítica</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ticket-tags">Tags</label>
+                            <input type="text" id="ticket-tags" class="form-input" placeholder="Separadas por vírgula">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ticket-descricao">Descrição *</label>
+                        <textarea id="ticket-descricao" class="form-textarea" rows="6" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ticket-anexos">Anexos</label>
+                        <input type="file" id="ticket-anexos" class="form-input" multiple>
+                        <small class="form-help">Você pode anexar múltiplos arquivos</small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Criar Ticket
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="btn-cancelar-ticket">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Outras seções serão adicionadas posteriormente -->
+        <section id="usuarios-section" class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-users"></i> Gerenciar Usuários</h2>
+            </div>
+            <p>Seção de usuários em desenvolvimento...</p>
+        </section>
+
+        <section id="categorias-section" class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-tags"></i> Gerenciar Categorias</h2>
+                <div class="section-actions">
+                    <button class="btn btn-primary" id="btn-nova-categoria">
+                        <i class="fas fa-plus"></i> Nova Categoria
+                    </button>
+                </div>
+            </div>
+
+            <div id="categorias-form-container" class="form-container" style="display: none;">
+                <!-- Formulário será inserido aqui pelo JS -->
+            </div>
+
+            <div class="table-container">
+                <table class="tickets-table" id="categorias-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th>Cor</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categorias-tbody">
+                        <!-- Categorias serão carregadas dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="relatorios-section" class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-bar"></i> Relatórios</h2>
+            </div>
+            <p>Seção de relatórios em desenvolvimento...</p>
+        </section>
+
+        <section id="configuracoes-section" class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-cog"></i> Configurações</h2>
+            </div>
+            <p>Seção de configurações em desenvolvimento...</p>
+        </section>
+    </main>
+
+    <!-- Modal para visualizar ticket -->
+    <div id="ticket-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-ticket-titulo">Detalhes do Ticket</h3>
+                <button class="modal-close" id="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-ticket-content">
+                <!-- Conteúdo do ticket será carregado dinamicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container">
+        <!-- Notificações serão adicionadas dinamicamente -->
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/dados.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/tickets.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/usuarios.js"></script>
+    <script src="js/categorias.js"></script>
+</body>
+</html>

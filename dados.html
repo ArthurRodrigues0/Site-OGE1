@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Dados - Sistema de Tickets</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-ticket-alt"></i>
+                <h1>Sistema de Tickets</h1>
+            </div>
+            <div class="user-info">
+                <a href="dados.html" class="user-profile-link">
+                    <div class="user-profile">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="usuario-nome">Administrador</span>
+                        <span class="user-role" id="usuario-perfil">Admin</span>
+                    </div>
+                </a>
+                <div class="header-actions">
+                    <button class="btn-icon" id="btn-logout" title="Sair">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <nav class="sidebar-nav">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <!-- Outros itens de menu podem ser adicionados aqui -->
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section id="dados-section" class="content-section active">
+            <div class="section-header">
+                <h2><i class="fas fa-user-edit"></i> Meus Dados</h2>
+            </div>
+            <div class="form-container">
+                <form id="form-dados-usuario">
+                    <div class="form-group">
+                        <label for="dados-nome">Nome</label>
+                        <input type="text" id="dados-nome" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="dados-email">Email</label>
+                        <input type="email" id="dados-email" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="dados-perfil">Perfil</label>
+                        <input type="text" id="dados-perfil" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="dados-departamento">Departamento</label>
+                        <input type="text" id="dados-departamento" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="dados-data-criacao">Membro Desde</label>
+                        <input type="text" id="dados-data-criacao" class="form-input" readonly>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/utils.js"></script>
+    <script src="js/dados.js"></script>
+</body>
+</html>
